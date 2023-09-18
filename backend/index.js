@@ -1,6 +1,8 @@
 const express = require ('express')
 const app = express();
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.listen(9000, () => console. log('OK'));
 
 const mysql = require('mysql2/promise')
@@ -33,10 +35,19 @@ app.get('/pessoa/:id', async (req,res) =>{
     return res.status(200).json(query);
 })
 
+app.get('/pessoa/busca/:nome', async (req,res) =>{
+    //return res.json(req.params)
+    const {nome} = req.params;
+    let nomex = '%'+nome+'%'
+    const [query] = await connection.execute('select * from TestePessoa.Pessoa where nome like ?', [nomex]);
+    if (query.length === 0) return res.status(400).json ({mensagem: 'Não encontrado. '})
+    return res.status(200).json(query);
+})
+
 app.post('/pessoa', async (req,res) =>{
-    //return res.json(req.body)
-    const {nome, email} = req.body
-    return res.json(nome)
-    const [query] = await connection.execute('insert into TestePessoa.Pessoa (nome,email) values(?,?)', [nome,email])
-    return query
+    const {nome, email} = req.body;
+    const [query] = await connection.
+    execute('insert into TestePessoa.Pessoa (nome,email) values(?,?)', 
+    [nome,email])
+    return res.status(200).json(query);
 })
