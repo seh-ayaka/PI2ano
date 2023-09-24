@@ -51,3 +51,21 @@ app.post('/pessoa', async (req,res) =>{
     [nome,email])
     return res.status(200).json(query);
 })
+
+app.put('/pessoa', async (req, res) => {
+    const { nome, email } = req.body;
+    const [query] = await connection.
+    execute('update TestePessoa.Pessoa (nome,email) values(?,?)', [nome,email]);
+    if (query.affectedRows === 1) {
+    return res.status(200).json({ message: 'Pessoa atualizada com sucesso' });
+    } else {
+    return res.status(404).json({ error: 'Pessoa não encontrada' });
+    }
+})
+
+app.delete('/pessoa/:id', async (req, res) => {
+    const { id } = req.params;
+    const [deleteResult] = await connection.execute('DELETE FROM TestePessoa.Pessoa WHERE id = ?', [id]);
+    if (deleteResult.affectedRows === 0) return res.status(404).json({ mensagem: 'Pessoa não encontrada.' });
+    return res.status(200).json({ mensagem: 'Pessoa excluída com sucesso.' });
+})
