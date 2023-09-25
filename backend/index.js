@@ -69,3 +69,117 @@ app.delete('/pessoa/:id', async (req, res) => {
     if (deleteResult.affectedRows === 0) return res.status(404).json({ mensagem: 'Pessoa não encontrada.' });
     return res.status(200).json({ mensagem: 'Pessoa excluída com sucesso.' });
 })
+
+/*===================================================================*/
+
+
+const getALLdoador = async () =>{
+    const [query] = await connection
+    .execute('select * from modelo_pia.doador')
+    return query;
+}
+
+app.get('/doador', async (req,res)=>{
+    const consulta = await getALLdoador();
+    return res.status(200).json(consulta);
+})
+
+app.get('/doador/:id', async (req,res) =>{
+    const {id} = req.params;
+    const [query] = await connection.execute('select * from modelo_pia.doador where id = ?', [id]);
+    if (query.length === 0) return res.status(400).json ({mensagem: 'Não encontrado. '})
+    return res.status(200).json(query);
+})
+
+app.get('/doador/busca/:nome', async (req,res) =>{
+    //return res.json(req.params)
+    const {nome} = req.params;
+    let nomex = '%'+nome+'%'
+    const [query] = await connection.execute('select * from modelo_pia.doador where nome like ?', [nomex]);
+    if (query.length === 0) return res.status(400).json ({mensagem: 'Não encontrado. '})
+    return res.status(200).json(query);
+})
+
+app.post('/doador', async (req,res) =>{
+    const {nome, email, telefone, senha, cep, endereco, rg} = req.body;
+    const [query] = await connection.
+    execute('insert into modelo_pia.doador (nome,email,telefone,senha,cep,endereco,rg) values(?,?,?,?,?,?,?)', 
+    [nome,email, telefone, senha, cep, endereco, rg])
+    return res.status(200).json(query);
+})
+
+app.put('/doador/:id', async (req, res) => {
+    const { id } = req.params;
+    const { nome, email , telefone, senha, cep, endereco, rg} = req.body;
+    const [query] = await connection.
+    execute('update modelo_pia.doador (id,nome,email,telefone,senha,cep,endereco,rg) values(?,?,?,?,?,?,?,?)', [id,nome,email, telefone, senha, cep, endereco, rg]);
+    if (query.affectedRows === 1) {
+    return res.status(200).json({ message: 'Pessoa atualizada com sucesso' });
+    } else {
+    return res.status(404).json({ error: 'Pessoa não encontrada' });
+    }
+})
+
+app.delete('/doador/:id', async (req, res) => {
+    const { id } = req.params;
+    const [deleteResult] = await connection.execute('DELETE FROM modelo_pia.doador WHERE id = ?', [id]);
+    if (deleteResult.affectedRows === 0) return res.status(404).json({ mensagem: 'Pessoa não encontrada.' });
+    return res.status(200).json({ mensagem: 'Pessoa excluída com sucesso.' });
+})
+
+/*===================================================================*/
+
+
+const getALLdoacao = async () =>{
+    const [query] = await connection
+    .execute('select * from modelo_pia.doacao')
+    return query;
+}
+
+app.get('/doacao', async (req,res)=>{
+    const consulta = await getALLdoacao();
+    return res.status(200).json(consulta);
+})
+
+app.get('/doacao/:id', async (req,res) =>{
+    const {id} = req.params;
+    const [query] = await connection.execute('select * from modelo_pia.doacao where id = ?', [id]);
+    if (query.length === 0) return res.status(400).json ({mensagem: 'Não encontrado. '})
+    return res.status(200).json(query);
+})
+
+app.get('/doacao/busca/:nome', async (req,res) =>{
+    //return res.json(req.params)
+    const {nome} = req.params;
+    let nomex = '%'+nome+'%'
+    const [query] = await connection.execute('select * from modelo_pia.doacao where nome like ?', [nomex]);
+    if (query.length === 0) return res.status(400).json ({mensagem: 'Não encontrado. '})
+    return res.status(200).json(query);
+})
+
+app.post('/doacao', async (req,res) =>{
+    const {valor, data, tipo, descricao, titulo, status, doador_id} = req.body;
+    const [query] = await connection.
+    execute('insert into modelo_pia.doacao (valor, data, tipo, descricao, titulo, status, doador_id) values(?,?,?,?,?,?,?)', 
+    [valor, data, tipo, descricao, titulo, status, doador_id])
+    return res.status(200).json(query);
+})
+
+app.put('/doacao/:id', async (req, res) => {
+    const { id } = req.params;
+    const { valor, data, tipo, descricao, titulo, status, doador_id} = req.body;
+    const [query] = await connection.
+    execute('update modelo_pia.doacao (id,valor, data, tipo, descricao, titulo, status, doador_id) values(?,?,?,?,?,?,?,?)', [id,valor, data, tipo, descricao, titulo, status, doador_id]);
+    if (query.affectedRows === 1) {
+    return res.status(200).json({ message: 'Pessoa atualizada com sucesso' });
+    } else {
+    return res.status(404).json({ error: 'Pessoa não encontrada' });
+    }
+})
+
+app.delete('/doacao/:id', async (req, res) => {
+    const { id } = req.params;
+    const [deleteResult] = await connection.execute('DELETE FROM modelo_pia.doacao WHERE id = ?', [id]);
+    if (deleteResult.affectedRows === 0) return res.status(404).json({ mensagem: 'Pessoa não encontrada.' });
+    return res.status(200).json({ mensagem: 'Pessoa excluída com sucesso.' });
+})
