@@ -12,6 +12,7 @@ const connection = mysql.createPool({
     user: 'root',
     password: ''
 })
+
 /*
 app.get('/',(req,res)=> {
     res.send ("Serena");
@@ -69,6 +70,7 @@ app.delete('/pessoa/:id', async (req, res) => {
     if (deleteResult.affectedRows === 0) return res.status(404).json({ mensagem: 'Pessoa não encontrada.' });
     return res.status(200).json({ mensagem: 'Pessoa excluída com sucesso.' });
 })
+
 */
 
 /*===================================================================*/
@@ -102,18 +104,18 @@ app.get('/doador/busca/:nome', async (req,res) =>{
 })
 
 app.post('/doador', async (req,res) =>{
-    const {nome, email, telefone, senha, cep, endereco, rg} = req.body;
+    const {cpf, nome, email, telefone, senha, cep, endereco, rg} = req.body;
     const [query] = await connection.
-    execute('insert into modelo_pia.doador (nome,email,telefone,senha,cep,endereco,rg) values(?,?,?,?,?,?,?)', 
-    [nome,email, telefone, senha, cep, endereco, rg])
+    execute('insert into modelo_pia.doador (cpf,nome,email,telefone,senha,cep,endereco,rg) values(?,?,?,?,?,?,?,?)', 
+    [cpf,nome,email, telefone, senha, cep, endereco, rg])
     return res.status(200).json(query);
 })
 
 app.put('/doador/:id', async (req, res) => {
     const { id } = req.params;
-    const { nome, email , telefone, senha, cep, endereco, rg} = req.body;
+    const { cpf, nome, email , telefone, senha, cep, endereco, rg} = req.body;
     const [query] = await connection.
-    execute('update modelo_pia.doador (id,nome,email,telefone,senha,cep,endereco,rg) set values(?,?,?,?,?,?,?,?)', [id,nome,email, telefone, senha, cep, endereco, rg]);
+    execute('update modelo_pia.doador (id, cpf,nome,email,telefone,senha,cep,endereco,rg) set values(?,?,?,?,?,?,?,?,?)', [id,cpf,nome,email, telefone, senha, cep, endereco, rg]);
     if (query.affectedRows === 1) {
     return res.status(200).json({ message: 'Pessoa atualizada com sucesso' });
     } else {
