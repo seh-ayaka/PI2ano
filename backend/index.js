@@ -1,8 +1,10 @@
+//para rodar o backend: node nomedoarquivo.js (ex: index.js ou App.js)
 const express = require ('express')
+const cors = require('cors'); //rodar app install cors
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(cors());
 app.listen(9000, () => console. log('OK'));
 
 const mysql = require('mysql2/promise')
