@@ -1,6 +1,7 @@
 //para rodar o backend: node nomedoarquivo.js (ex: index.js ou App.js)
 const express = require ('express')
-const cors = require('cors'); //rodar app install cors
+const cors = require('cors'); //rodar app install cors dentro da backend
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
